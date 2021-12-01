@@ -1,6 +1,7 @@
 package org.training.campus.onlineshop.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,12 +26,27 @@ public class ProductDao {
 		try (Connection conn = dataSource.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet resultSet = stmt
-						.executeQuery("select id, name, price, creation_date from product order by name asc")) {//\"online-shop\".
+						.executeQuery("select id, name, price, creation_date from product order by name asc")) {
 			List<Product> products = new ArrayList<>();
 			while (resultSet.next()) {
 				products.add(mapper.mapRowToProduct(resultSet));
 			}
 			return products;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException(e);
+		}
+	}
+	
+	public void remove(Product product) {
+		remove(product.getId());
+	}
+	
+	public void remove(long id) {
+		try(Connection conn = dataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement("delete from product where id=?")){
+			stmt.setLong(1, id);
+			stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DataAccessException(e);

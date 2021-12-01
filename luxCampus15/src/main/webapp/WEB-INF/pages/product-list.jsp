@@ -15,14 +15,18 @@
 			<th>Created</th>
 		</thead>
 		<tbody>
-			<c:forEach items="${products}" var="product">
+			<c:forEach items="${products}" var="product" varStatus="status">
 				<tr>
 					<td>${product.name}</td>
 					<td>${product.price}</td>
 					<td>${product.creationDate}</td>
+					<td><a href=products/edit?item=${status.index}>Edit</a></td>
+					<td><a href=products/delete?item=${status.index}>Delete</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+	<br>
+	<a href=products/add>New</a>
 </body>
 </html>

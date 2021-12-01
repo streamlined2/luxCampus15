@@ -13,8 +13,8 @@ public class ListAllProductsServlet extends AbstractServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setAttribute("products", getProductDao().getAll());
-		getServletContext().getRequestDispatcher("/product-list.jsp").forward(req, resp);
+		fetchProducts(req.getSession());
+		getServletContext().getRequestDispatcher("/WEB-INF/pages/product-list.jsp").forward(req, resp);
 	}
 
 	@Override

@@ -5,6 +5,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.training.campus.onlineshop.dao.ProductDao;
@@ -14,6 +16,8 @@ public abstract class AbstractServlet extends HttpServlet {
 	private static final String DATASOURCE = "DATASOURCE";
 	private static final String PRODUCT_DAO = "PRODUCT_DAO";
 	private static final String JNDI_DATA = "jdbc/onlineshop";
+	protected static final String PRODUCTS_ATTRIBUTE = "products";
+	protected static final String ITEM_PARAMETER = "item";
 
 	@Override
 	public void init() throws ServletException {
@@ -52,4 +56,8 @@ public abstract class AbstractServlet extends HttpServlet {
 		return (ProductDao) getServletContext().getAttribute(PRODUCT_DAO);
 	}
 
+	protected void fetchProducts(HttpSession session) {
+		session.setAttribute(PRODUCTS_ATTRIBUTE, getProductDao().getAll());
+	}
+	
 }
