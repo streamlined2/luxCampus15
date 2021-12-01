@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,13 +16,13 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @ToString(callSuper = true)
 @EqualsAndHashCode(of = { "id" })
 public class Product implements Serializable {
 
-	@Setter(AccessLevel.PROTECTED)
-	private long id;
+	private @NonNull long id;
 	private @NonNull String name;
 	private @NonNull BigDecimal price;
 	private @NonNull LocalDate creationDate;

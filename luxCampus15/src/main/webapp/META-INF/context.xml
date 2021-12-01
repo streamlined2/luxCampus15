@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-	<Resource name="jdbc/online-shop" auth="Container"
+	<Resource name="jdbc/onlineshop" auth="Container"
 		type="javax.sql.DataSource" maxTotal="10" maxIdle="5"
 		maxWaitMillis="10000" username="jacksparrow" password="horriblesecret"
 		driverClassName="org.postgresql.Driver"
-		url="jdbc:postgresql://localhost/postgres" />
+		url="jdbc:postgresql://localhost/postgres?currentSchema=onlineshop" />
 </Context>
