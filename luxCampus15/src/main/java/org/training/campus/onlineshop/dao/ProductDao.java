@@ -27,6 +27,7 @@ public class ProductDao {
 				Statement stmt = conn.createStatement();
 				ResultSet resultSet = stmt
 						.executeQuery("select id, name, price, creation_date from product order by name asc")) {
+
 			List<Product> products = new ArrayList<>();
 			while (resultSet.next()) {
 				products.add(mapper.mapRowToProduct(resultSet));
@@ -37,20 +38,60 @@ public class ProductDao {
 			throw new DataAccessException(e);
 		}
 	}
-	
+
+	public void persist(Product product) {
+		try (Connection conn = dataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(
+						"insert into product (name, price, creation_date) values(?,?,?)",
+						Statement.RETURN_GENERATED_KEYS)) {
+
+			mapper.fillInStatementValues(stmt, product);
+			stmt.executeUpdate();
+			try (ResultSet keySet = stmt.getGeneratedKeys()) {
+				if (keySet.next()) {
+					product.setId(keySet.getLong(1));
+				} else {
+					throw new DataAccessException("no primary key for new tuple");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException(e);
+		}
+	}
+
+	public void merge(Product product) {
+		try (Connection conn = dataSource.getConnection();
+				PreparedStatement stmt = conn
+						.prepareStatement("update product set name=?, price=?, creation_date=? where id=?")) {
+
+			final int index = mapper.fillInStatementValues(stmt, product);
+			stmt.setLong(index, product.getId());
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException(e);
+		}
+	}
+
 	public void remove(Product product) {
 		remove(product.getId());
 	}
-	
+
 	public void remove(long id) {
-		try(Connection conn = dataSource.getConnection();
-				PreparedStatement stmt = conn.prepareStatement("delete from product where id=?")){
+		try (Connection conn = dataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement("delete from product where id=?")) {
+
 			stmt.setLong(1, id);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DataAccessException(e);
 		}
+	}
+
+	public ProductRowMapper getMapper() {
+		return mapper;
 	}
 
 }

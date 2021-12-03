@@ -13,16 +13,13 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter @Setter @Builder
+@NoArgsConstructor @AllArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(of = { "id" })
 public class Product implements Serializable {
 
-	private @NonNull long id;
+	private long id;
 	private @NonNull String name;
 	private @NonNull BigDecimal price;
 	private @NonNull LocalDate creationDate;

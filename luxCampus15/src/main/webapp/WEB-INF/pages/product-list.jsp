@@ -5,14 +5,27 @@
 <head>
 <meta charset="UTF-8">
 <title>List of products</title>
+<style>
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+th, td {
+	padding: 5px;
+}
+</style>
 </head>
 <body>
-	<h3>Products by name</h3>
 	<table>
+		<caption>
+			<h3>Products by name</h3>
+		</caption>
 		<thead>
-			<th>Name</th>
-			<th>Price</th>
-			<th>Created</th>
+			<tr>
+				<th>Name</th>
+				<th>Price</th>
+				<th>Created</th>
+			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${products}" var="product" varStatus="status">
@@ -27,6 +40,6 @@
 		</tbody>
 	</table>
 	<br>
-	<a href=products/add>New</a>
+	<a href=products/add>Create new</a>
 </body>
 </html>
