@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import org.training.campus.onlineshop.dao.ProductDao;
+import org.training.campus.onlineshop.dao.JdbcProductDao;
 import org.training.campus.onlineshop.entity.Product;
 
 public abstract class AbstractServlet extends HttpServlet {
@@ -65,12 +65,12 @@ public abstract class AbstractServlet extends HttpServlet {
 
 	private void initProductDao() throws ServletException {
 		if (getServletContext().getAttribute(PRODUCT_DAO) == null) {
-			getServletContext().setAttribute(PRODUCT_DAO, new ProductDao(obtainDataSource()));
+			getServletContext().setAttribute(PRODUCT_DAO, new JdbcProductDao(obtainDataSource()));
 		}
 	}
 
-	protected ProductDao getProductDao() {
-		return (ProductDao) getServletContext().getAttribute(PRODUCT_DAO);
+	protected JdbcProductDao getProductDao() {
+		return (JdbcProductDao) getServletContext().getAttribute(PRODUCT_DAO);
 	}
 
 	protected void fetchProducts(HttpServletRequest req) {
