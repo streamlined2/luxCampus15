@@ -10,12 +10,14 @@ import org.training.campus.onlineshop.entity.Product;
 
 @WebServlet(name = "CreateProductServlet", description = "creates product", loadOnStartup = 1, urlPatterns = "/products/add")
 public class CreateProductServlet extends AbstractServlet {
+	
+	protected static final String REDIRECTION_RESOURCE = "/WEB-INF/pages/new-edit-product.jsp";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.getSession().setAttribute(CREATE_PRODUCT_ATTRIBUTE, Boolean.TRUE);
 		req.getSession().setAttribute(PRODUCT_ATTRIBUTE, new Product());
-		getServletContext().getRequestDispatcher("/WEB-INF/pages/new-edit-product.jsp").forward(req, resp);
+		getServletContext().getRequestDispatcher(REDIRECTION_RESOURCE).forward(req, resp);
 	}
 
 }
