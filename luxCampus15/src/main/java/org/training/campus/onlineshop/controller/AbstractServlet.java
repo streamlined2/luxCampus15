@@ -42,6 +42,11 @@ public abstract class AbstractServlet extends HttpServlet {
 		doGet(req, resp);
 	}
 
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		super.doGet(req, resp);
+	}
+
 	protected Locale getLocale() {
 		return (Locale) getServletContext().getAttribute(LOCALE_ATTRIBUTE);
 	}
