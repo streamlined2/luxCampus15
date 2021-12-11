@@ -2,7 +2,6 @@ package org.training.campus.onlineshop.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -15,25 +14,19 @@ import javax.servlet.ServletException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.training.campus.onlineshop.dao.JdbcProductDao;
 import org.training.campus.onlineshop.entity.Product;
 
 @ExtendWith(MockitoExtension.class)
-class ListAllProductsServletTest extends AbstractServletTest {
-
-	@Mock
-	private JdbcProductDao daoMock;
+class ListAllProductsServletTest extends AbstractDAOServletTest {
 
 	@Captor
-	private ArgumentCaptor<Product> productListCaptor;
+	private ArgumentCaptor<? extends List<Product>> productListCaptor;
 
 	ListAllProductsServletTest() {
-		servlet = mock(ListAllProductsServlet.class, Answers.CALLS_REAL_METHODS);
+		super(ListAllProductsServlet.class);
 	}
 
 	@Test
@@ -45,7 +38,6 @@ class ListAllProductsServletTest extends AbstractServletTest {
 					new Product(3L, "MarsTesla", BigDecimal.valueOf(10_000_000.00D), LocalDate.of(2020, 01, 01)));
 			List<Product> copyList = List.copyOf(sampleList);
 			when(daoMock.getAll()).thenReturn(sampleList);
-			when(context.getAttribute(AbstractServlet.PRODUCT_DAO)).thenReturn(daoMock);
 
 			servlet.doGet(req, resp);
 

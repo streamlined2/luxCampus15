@@ -9,13 +9,15 @@ import org.training.campus.onlineshop.entity.Product;
 
 @WebServlet(name = "DeleteProductServlet", description = "deletes selected product", loadOnStartup = 1, urlPatterns = "/products/delete")
 public class DeleteProductServlet extends AbstractServlet {
+	
+	protected static final String REDIRECTION_RESOURCE = "/products";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			deleteProduct(req);
 			fetchProducts(req);
-			resp.sendRedirect(req.getContextPath() + "/products");
+			resp.sendRedirect(req.getContextPath() + REDIRECTION_RESOURCE);
 		} catch (ServletException | IOException e) {
 			e.printStackTrace();
 			throw e;

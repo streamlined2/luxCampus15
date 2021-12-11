@@ -2,7 +2,6 @@ package org.training.campus.onlineshop.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -14,7 +13,6 @@ import java.util.List;
 import javax.servlet.ServletException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -27,7 +25,7 @@ class ModifyProductServletTest extends AbstractServletTest {
 	private ArgumentCaptor<Product> productCaptor;
 
 	ModifyProductServletTest() {
-		servlet = mock(ModifyProductServlet.class, Answers.CALLS_REAL_METHODS);
+		super(ModifyProductServlet.class);
 	}
 
 	@Test
@@ -48,10 +46,7 @@ class ModifyProductServletTest extends AbstractServletTest {
 			verify(session).setAttribute(eq(AbstractServlet.PRODUCT_ATTRIBUTE), productCaptor.capture());
 			assertNotNull(productCaptor.getValue());
 			assertSame(sample, productCaptor.getValue());
-			assertEquals(id, productCaptor.getValue().getId());
-			assertEquals(name, productCaptor.getValue().getName());
-			assertEquals(price, productCaptor.getValue().getPrice());
-			assertEquals(creationDate, productCaptor.getValue().getCreationDate());
+			assertEquals(sample, productCaptor.getValue());
 
 			verify(context).getRequestDispatcher(CreateProductServlet.REDIRECTION_RESOURCE);
 			verify(requestDispatcher).forward(req, resp);

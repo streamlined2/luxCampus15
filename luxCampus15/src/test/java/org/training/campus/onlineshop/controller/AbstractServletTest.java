@@ -1,6 +1,8 @@
 package org.training.campus.onlineshop.controller;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import javax.servlet.RequestDispatcher;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -30,15 +33,20 @@ abstract class AbstractServletTest {
 	protected ServletConfig config;
 	@Mock
 	protected RequestDispatcher requestDispatcher;
+
 	protected AbstractServlet servlet;
+	
+	AbstractServletTest(Class<? extends AbstractServlet> cl){
+		servlet = mock(cl, Answers.CALLS_REAL_METHODS);		
+	}
 
 	@BeforeEach
 	void setUp() throws Exception {
 		when(req.getSession()).thenReturn(session);
 		when(config.getServletContext()).thenReturn(context);
-		when(context.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
 		when(servlet.getServletConfig()).thenReturn(config);
 		when(servlet.getServletContext()).thenReturn(context);
+		lenient().when(context.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
 	}
 
 }

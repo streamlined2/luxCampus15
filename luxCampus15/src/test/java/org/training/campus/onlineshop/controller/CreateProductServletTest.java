@@ -5,14 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,7 +23,7 @@ class CreateProductServletTest extends AbstractServletTest {
 	private ArgumentCaptor<Product> productCaptor;
 
 	CreateProductServletTest() {
-		servlet = mock(CreateProductServlet.class, Answers.CALLS_REAL_METHODS);
+		super(CreateProductServlet.class);
 	}
 
 	@Test
