@@ -33,8 +33,12 @@ class ModifyProductServletTest extends AbstractServletTest {
 	@Test
 	void doGetSetsUpCorrectAttributesAndForwards() {
 		try {
-			final Product sample = Product.builder().id(10L).name("Most beautiful picture ever")
-					.price(BigDecimal.valueOf(1_000_000.00D)).creationDate(LocalDate.now()).build();
+			final long id = 10L;
+			final String name = "Most beautiful picture ever";
+			final BigDecimal price = BigDecimal.valueOf(1_000_000.00D);
+			final LocalDate creationDate = LocalDate.now();
+			final Product sample = Product.builder().id(id).name(name)
+					.price(price).creationDate(creationDate).build();
 			when(req.getParameter(AbstractServlet.ITEM_PARAMETER)).thenReturn("0");
 			when(session.getAttribute(AbstractServlet.PRODUCTS_ATTRIBUTE)).thenReturn(List.of(sample));
 
@@ -44,6 +48,10 @@ class ModifyProductServletTest extends AbstractServletTest {
 			verify(session).setAttribute(eq(AbstractServlet.PRODUCT_ATTRIBUTE), productCaptor.capture());
 			assertNotNull(productCaptor.getValue());
 			assertSame(sample, productCaptor.getValue());
+			assertEquals(id, productCaptor.getValue().getId());
+			assertEquals(name, productCaptor.getValue().getName());
+			assertEquals(price, productCaptor.getValue().getPrice());
+			assertEquals(creationDate, productCaptor.getValue().getCreationDate());
 
 			verify(context).getRequestDispatcher(CreateProductServlet.REDIRECTION_RESOURCE);
 			verify(requestDispatcher).forward(req, resp);

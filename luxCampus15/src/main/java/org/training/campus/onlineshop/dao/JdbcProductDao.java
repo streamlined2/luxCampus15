@@ -40,24 +40,27 @@ public class JdbcProductDao implements ProductDao {
 	}
 
 	public void persist(Product product) {
-		try(Connection conn = dataSource.getConnection()){
-			conn.setAutoCommit(false);			
-			try (PreparedStatement stmt = conn.prepareStatement(
-					"insert into product (name, price, creation_date) values(?,?,?)",
-					Statement.RETURN_GENERATED_KEYS)) {
+		try (Connection conn = dataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(
+						"insert into product (name, price, creation_date) values(?,?,?)",
+						Statement.RETURN_GENERATED_KEYS)) {
 
-				mapper.fillInStatementValues(stmt, product);
-				stmt.executeUpdate();
-				try (ResultSet keySet = stmt.getGeneratedKeys()) {
-					if (keySet.next()) {
-						product.setId(keySet.getLong(1));
-						conn.commit();
-					} else {
-						throw new DataAccessException("no primary key for new tuple");
-					}
+			mapper.fillInStatementValues(stmt, product);
+			conn.setAutoCommit(false);
+			stmt.executeUpdate();
+			try (ResultSet keySet = stmt.getGeneratedKeys()) {
+				if (keySet.next()) {
+					product.setId(keySet.getLong(1));
+					conn.commit();
+				} else {
+					throw new DataAccessException("no primary key for new tuple");
 				}
 			} finally {
-				conn.rollback();
+				try {
+					conn.rollback();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

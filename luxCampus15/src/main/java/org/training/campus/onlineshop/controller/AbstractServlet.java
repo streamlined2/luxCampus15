@@ -19,7 +19,7 @@ import org.training.campus.onlineshop.entity.Product;
 public abstract class AbstractServlet extends HttpServlet {
 
 	private static final Locale DEFAULT_LOCALE = Locale.forLanguageTag("uk");
-	private static final String PRODUCT_DAO = "productDao";
+	protected static final String PRODUCT_DAO = "productDao";
 	private static final String DATA_JNDI_REF = "jdbc/onlineshop";
 	protected static final String LOCALE_ATTRIBUTE = "locale";
 	protected static final String PRODUCTS_ATTRIBUTE = "products";

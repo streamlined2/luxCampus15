@@ -11,10 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 		"/products", "/" })
 public class ListAllProductsServlet extends AbstractServlet {
 
+	protected static final String REDIRECTION_RESOURCE = "/WEB-INF/pages/product-list.jsp";
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		fetchProducts(req);
-		getServletContext().getRequestDispatcher("/WEB-INF/pages/product-list.jsp").forward(req, resp);
+		getServletContext().getRequestDispatcher(REDIRECTION_RESOURCE).forward(req, resp);
 	}
 
 }
