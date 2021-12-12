@@ -15,10 +15,12 @@ import org.training.campus.onlineshop.entity.Product;
 @WebServlet(name = "SaveProductServlet", description = "saves product", loadOnStartup = 1, urlPatterns = "/saveproduct")
 public class SaveProductServlet extends AbstractServlet {
 
+	protected static final String REDIRECTION_RESOURCE = "/products";
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		updateSaveProduct(req);
-		resp.sendRedirect(req.getContextPath() + "/products");
+		resp.sendRedirect(req.getContextPath() + REDIRECTION_RESOURCE);
 	}
 
 	private void updateSaveProduct(HttpServletRequest req) throws ServletException {
