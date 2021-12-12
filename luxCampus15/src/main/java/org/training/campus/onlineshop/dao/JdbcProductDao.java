@@ -16,6 +16,7 @@ public class JdbcProductDao implements ProductDao {
 
 	protected static final String FETCH_ALL_STATEMENT = "select id, name, price, creation_date from product order by name asc";
 	protected static final String INSERT_ENTITY_STATEMENT = "insert into product (name, price, creation_date) values(?,?,?)";
+	protected static final String UPDATE_ENTITY_STATEMENT = "update product set name=?, price=?, creation_date=? where id=?";
 
 	private DataSource dataSource;
 	private ProductRowMapper mapper;
@@ -71,8 +72,7 @@ public class JdbcProductDao implements ProductDao {
 
 	public void merge(Product product) {
 		try (Connection conn = dataSource.getConnection();
-				PreparedStatement stmt = conn
-						.prepareStatement("update product set name=?, price=?, creation_date=? where id=?")) {
+				PreparedStatement stmt = conn.prepareStatement(UPDATE_ENTITY_STATEMENT)) {
 
 			final int index = mapper.fillInStatementValues(stmt, product);
 			stmt.setLong(index, product.getId());
