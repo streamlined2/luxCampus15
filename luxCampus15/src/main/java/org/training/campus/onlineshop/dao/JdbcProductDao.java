@@ -17,6 +17,7 @@ public class JdbcProductDao implements ProductDao {
 	protected static final String FETCH_ALL_STATEMENT = "select id, name, price, creation_date from product order by name asc";
 	protected static final String INSERT_ENTITY_STATEMENT = "insert into product (name, price, creation_date) values(?,?,?)";
 	protected static final String UPDATE_ENTITY_STATEMENT = "update product set name=?, price=?, creation_date=? where id=?";
+	protected static final String DELETE_ENTITY_STATEMENT = "delete from product where id=?";
 
 	private DataSource dataSource;
 	private ProductRowMapper mapper;
@@ -89,7 +90,7 @@ public class JdbcProductDao implements ProductDao {
 
 	public void remove(long id) {
 		try (Connection conn = dataSource.getConnection();
-				PreparedStatement stmt = conn.prepareStatement("delete from product where id=?")) {
+				PreparedStatement stmt = conn.prepareStatement(DELETE_ENTITY_STATEMENT)) {
 
 			stmt.setLong(1, id);
 			stmt.executeUpdate();

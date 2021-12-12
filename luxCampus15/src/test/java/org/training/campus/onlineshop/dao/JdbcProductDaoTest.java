@@ -240,7 +240,7 @@ class JdbcProductDaoTest {
 	}
 
 	@Test
-	void testPersist_EntityMergedSuccessfully() throws SQLException {
+	void testMerge_EntityMergedSuccessfully() throws SQLException {
 		final long id = 1000L;
 		final String name = "Rocket";
 		final BigDecimal price = BigDecimal.valueOf(500_000.00D);
@@ -251,7 +251,7 @@ class JdbcProductDaoTest {
 
 		dao.merge(product);
 
-		InOrder inOrder = inOrder(conn, prepStmt);
+		InOrder inOrder = inOrder(prepStmt);
 		inOrder.verify(prepStmt).setLong(anyInt(), anyLong());
 		inOrder.verify(prepStmt).executeUpdate();
 
@@ -263,7 +263,7 @@ class JdbcProductDaoTest {
 	}
 
 	@Test
-	void testPersist_ExceptionThrownWhileMergingEntity() throws SQLException {
+	void testMerge_ExceptionThrownWhileMergingEntity() throws SQLException {
 		final long id = 1000L;
 		final String name = "Rocket";
 		final BigDecimal price = BigDecimal.valueOf(500_000.00D);
@@ -278,8 +278,58 @@ class JdbcProductDaoTest {
 			dao.merge(product);
 		});
 
-		InOrder inOrder = inOrder(conn, prepStmt);
+		InOrder inOrder = inOrder(prepStmt);
 		inOrder.verify(prepStmt).setLong(anyInt(), anyLong());
+		inOrder.verify(prepStmt).executeUpdate();
+
+		assertEquals(id, product.getId());
+		assertEquals(name, product.getName());
+		assertEquals(price, product.getPrice());
+		assertEquals(creationDate, product.getCreationDate());
+
+	}
+
+	@Test
+	void testRemove_EntityRemovedSuccessfully() throws SQLException {
+		final long id = 1000L;
+		final String name = "Rocket";
+		final BigDecimal price = BigDecimal.valueOf(500_000.00D);
+		final LocalDate creationDate = LocalDate.of(1980, 1, 1);
+		final Product product = Product.builder().id(id).name(name).price(price).creationDate(creationDate).build();
+
+		assertNotEquals(0, product.getId());
+
+		dao.remove(product);
+
+		InOrder inOrder = inOrder(prepStmt);
+		inOrder.verify(prepStmt).setLong(1, id);
+		inOrder.verify(prepStmt).executeUpdate();
+
+		assertEquals(id, product.getId());
+		assertEquals(name, product.getName());
+		assertEquals(price, product.getPrice());
+		assertEquals(creationDate, product.getCreationDate());
+
+	}
+
+	@Test
+	void testRemove_ExceptionThrownWhileRemovingEntity() throws SQLException {
+		final long id = 1000L;
+		final String name = "Rocket";
+		final BigDecimal price = BigDecimal.valueOf(500_000.00D);
+		final LocalDate creationDate = LocalDate.of(1980, 1, 1);
+		final Product product = Product.builder().id(id).name(name).price(price).creationDate(creationDate).build();
+
+		assertNotEquals(0, product.getId());
+
+		when(prepStmt.executeUpdate()).thenThrow(SQLException.class);
+
+		assertThrows(DataAccessException.class, () -> {
+			dao.remove(product);
+		});
+
+		InOrder inOrder = inOrder(prepStmt);
+		inOrder.verify(prepStmt).setLong(1, id);
 		inOrder.verify(prepStmt).executeUpdate();
 
 		assertEquals(id, product.getId());
