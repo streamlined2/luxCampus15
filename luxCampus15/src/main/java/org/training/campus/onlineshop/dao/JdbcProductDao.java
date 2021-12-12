@@ -14,6 +14,8 @@ import org.training.campus.onlineshop.entity.Product;
 
 public class JdbcProductDao implements ProductDao {
 
+	protected static final String FETCH_ALL_STATEMENT = "select id, name, price, creation_date from product order by name asc";
+
 	private DataSource dataSource;
 	private ProductRowMapper mapper;
 
@@ -25,8 +27,7 @@ public class JdbcProductDao implements ProductDao {
 	public List<Product> getAll() {
 		try (Connection conn = dataSource.getConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet resultSet = stmt
-						.executeQuery("select id, name, price, creation_date from product order by name asc")) {
+				ResultSet resultSet = stmt.executeQuery(FETCH_ALL_STATEMENT)) {
 
 			List<Product> products = new ArrayList<>();
 			while (resultSet.next()) {
