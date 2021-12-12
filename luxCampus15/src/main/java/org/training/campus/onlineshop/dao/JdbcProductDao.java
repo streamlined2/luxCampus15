@@ -15,6 +15,7 @@ import org.training.campus.onlineshop.entity.Product;
 public class JdbcProductDao implements ProductDao {
 
 	protected static final String FETCH_ALL_STATEMENT = "select id, name, price, creation_date from product order by name asc";
+	protected static final String INSERT_ENTITY_STATEMENT = "insert into product (name, price, creation_date) values(?,?,?)";
 
 	private DataSource dataSource;
 	private ProductRowMapper mapper;
@@ -42,8 +43,7 @@ public class JdbcProductDao implements ProductDao {
 
 	public void persist(Product product) {
 		try (Connection conn = dataSource.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(
-						"insert into product (name, price, creation_date) values(?,?,?)",
+				PreparedStatement stmt = conn.prepareStatement(INSERT_ENTITY_STATEMENT,
 						Statement.RETURN_GENERATED_KEYS)) {
 
 			mapper.fillInStatementValues(stmt, product);
@@ -51,7 +51,7 @@ public class JdbcProductDao implements ProductDao {
 			stmt.executeUpdate();
 			try (ResultSet keySet = stmt.getGeneratedKeys()) {
 				if (keySet.next()) {
-					product.setId(keySet.getLong(1));
+					product.setId(keySet.getLong("id"));
 					conn.commit();
 				} else {
 					throw new DataAccessException("no primary key for new tuple");
