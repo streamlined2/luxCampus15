@@ -43,7 +43,6 @@ class ListAllProductsServletTest extends AbstractDAOServletTest {
 
 			verify(session).setAttribute(eq(AbstractServlet.PRODUCTS_ATTRIBUTE), productListCaptor.capture());
 			assertNotNull(productListCaptor.getValue());
-			assertSame(sampleList, productListCaptor.getValue());
 			assertEquals(copyList, productListCaptor.getValue());
 
 			verify(context).getRequestDispatcher(ListAllProductsServlet.REDIRECTION_RESOURCE);

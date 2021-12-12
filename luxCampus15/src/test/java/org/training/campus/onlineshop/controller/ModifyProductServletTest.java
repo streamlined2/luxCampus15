@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -38,14 +39,13 @@ class ModifyProductServletTest extends AbstractServletTest {
 			final Product sample = Product.builder().id(id).name(name)
 					.price(price).creationDate(creationDate).build();
 			when(req.getParameter(AbstractServlet.ITEM_PARAMETER)).thenReturn("0");
-			when(session.getAttribute(AbstractServlet.PRODUCTS_ATTRIBUTE)).thenReturn(List.of(sample));
+			when(session.getAttribute(AbstractServlet.PRODUCTS_ATTRIBUTE)).thenReturn(new LinkedList<>(List.of(sample)));
 
 			servlet.doGet(req, resp);
 
 			verify(session).setAttribute(AbstractServlet.CREATE_PRODUCT_ATTRIBUTE, Boolean.FALSE);
 			verify(session).setAttribute(eq(AbstractServlet.PRODUCT_ATTRIBUTE), productCaptor.capture());
 			assertNotNull(productCaptor.getValue());
-			assertSame(sample, productCaptor.getValue());
 			assertEquals(sample, productCaptor.getValue());
 
 			verify(context).getRequestDispatcher(CreateProductServlet.REDIRECTION_RESOURCE);

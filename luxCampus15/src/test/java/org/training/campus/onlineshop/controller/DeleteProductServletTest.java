@@ -37,10 +37,10 @@ class DeleteProductServletTest extends AbstractDAOServletTest {
 	@Test
 	void doGetFetchesProductListAndForwards() {
 		try {
-			Product p0, p1, p2;
+			Product p0, p2;
 			List<Product> sampleList = new LinkedList<>(List.of(
 					p0 = new Product(1L, "Spacesuit", BigDecimal.valueOf(1_000_000.00D), LocalDate.of(1999, 07, 10)),
-					p1 = new Product(2L, "Meteorite", BigDecimal.valueOf(100_000.00D), LocalDate.of(1980, 05, 15)),
+					new Product(2L, "Meteorite", BigDecimal.valueOf(100_000.00D), LocalDate.of(1980, 05, 15)),
 					p2 = new Product(3L, "MarsTesla", BigDecimal.valueOf(10_000_000.00D), LocalDate.of(2020, 01, 01))));
 			when(req.getParameter(AbstractServlet.ITEM_PARAMETER)).thenReturn("1");
 			when(session.getAttribute(AbstractServlet.PRODUCTS_ATTRIBUTE)).thenReturn(sampleList);
@@ -56,8 +56,8 @@ class DeleteProductServletTest extends AbstractDAOServletTest {
 			verify(session).setAttribute(eq(AbstractServlet.PRODUCTS_ATTRIBUTE), productListCaptor.capture());
 			assertNotNull(productListCaptor.getValue());
 			assertEquals(2, productListCaptor.getValue().size());
-			assertSame(p0, productListCaptor.getValue().get(0));
-			assertSame(p2, productListCaptor.getValue().get(1));
+			assertEquals(p0, productListCaptor.getValue().get(0));
+			assertEquals(p2, productListCaptor.getValue().get(1));
 
 			verify(resp).sendRedirect(urlCaptor.capture());
 			assertNotNull(urlCaptor.getValue());
